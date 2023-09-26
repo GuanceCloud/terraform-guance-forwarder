@@ -172,14 +172,15 @@ GUANCE_WORKSPACE_TOKEN = os.getenv('GUANCE_WORKSPACE_TOKEN')
 
 
 def lambda_handler(event, context):
-    client = TestClient(endpoint=GUANCE_ENDPOINT, token=GUANCE_WORKSPACE_TOKEN)
+    if not GUANCE_WORKSPACE_TOKEN:
+        client = DataKitClient(endpoint=GUANCE_ENDPOINT)
+    else:
+        client = TestClient(endpoint=GUANCE_ENDPOINT, token=GUANCE_WORKSPACE_TOKEN)
     client.send(parse(event))
     return
 
 
 def integration_test():
-    global GUANCE_ENDPOINT
-    GUANCE_ENDPOINT = 'https://openway.guance.com'
     aws_logs = {
         "awslogs": {
             "data": "H4sIAAAAAAAAAHWPwQqCQBCGX0Xm7EFtK+smZBEUgXoLCdMhFtKV3akI8d0bLYmibvPPN3wz00CJxmQnTO41whwWQRIctmEcB6sQbFC3CjW3XW8kxpOpP+OC22d1Wml1qZkQGtoMsScxaczKN3plG8zlaHIta5KqWsozoTYw3/djzwhpLwivWFGHGpAFe7DL68JlBUk+l7KSN7tCOEJ4M3/qOI49vMHj+zCKdlFqLaU2ZHV2a4Ct/an0/ivdX8oYc1UVX860fQDQiMdxRQEAAA=="
